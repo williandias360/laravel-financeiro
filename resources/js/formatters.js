@@ -3,6 +3,8 @@ const formatBrl = (value) => {
     return `R$ ${val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
 }
 
+const getPrimeiroDiaMes = (ano, mes) => new Date(ano, mes, 1)
 
-export { formatBrl }
+
+export { formatBrl, getPrimeiroDiaMes }
 

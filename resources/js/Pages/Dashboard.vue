@@ -8,15 +8,21 @@ const { Filtros } = defineProps(['Totalizador', 'Filtros'])
 
 const form = useForm("getparams", {
     data_inicio: Filtros.data_inicio,
+    data_final: Filtros.data_final,
+    filtroData: [Filtros.data_inicio, Filtros.data_final]
 })
 
 const submit = () => {
-    form.get(route('dashboard'))
+    form.transform((data) => ({
+        data_inicio: data.filtroData[0],
+        data_final: data.filtroData[1]
+    })).get(route('dashboard'))
 }
 
 </script>
 
 <template>
+
     <Head title="Dashboard" />
     <AuthenticatedLayout>
         <template #header>
@@ -31,7 +37,7 @@ const submit = () => {
                         <div class="grid grid-cols-3 gap-2 px-6 pt-2">
                             <div class="flex flex-col col-span-2">
                                 <label>Informe um período</label>
-                                <DatePicker v-model="form.data_inicio" />
+                                <DatePicker v-model="form.filtroData" />
                             </div>
                             <div class="pt-5">
                                 <button
@@ -49,7 +55,7 @@ const submit = () => {
                                 <label class="font-semibold text-xs md:text-base">Créditos</label>
                                 <span class="font-bold text-xs md:text-base">{{ formatBrl(Totalizador.Credito) }}</span>
                             </div>
-                            <div class="rounded p-4 md:p-8 text-white shadow-sm flex flex-col text-center" 
+                            <div class="rounded p-4 md:p-8 text-white shadow-sm flex flex-col text-center"
                                 :class="[Totalizador.Saldo > 0 ? 'bg-green-500' : 'bg-red-500']">
                                 <label class="font-semibold text-xs md:text-base">Saldo</label>
                                 <span class="font-bold text-xs md:text-base">{{ formatBrl(Totalizador.Saldo) }}</span>
