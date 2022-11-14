@@ -4,12 +4,13 @@ import DatePicker from '@/Components/DatePicker.vue'
 import BarChart from '@/Components/BarChart.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { formatBrl } from '@/formatters.js'
+import dayjs from 'dayjs';
 const { Filtros } = defineProps(['Totalizador', 'Filtros'])
 
 const form = useForm("getparams", {
     data_inicio: Filtros.data_inicio,
     data_final: Filtros.data_final,
-    filtroData: [Filtros.data_inicio, Filtros.data_final]
+    filtroData: [dayjs(Filtros.data_inicio).format('DD/MM/YYYY'), dayjs(Filtros.data_final).format('DD/MM/YYYY')]
 })
 
 const submit = () => {
@@ -30,7 +31,7 @@ const submit = () => {
                 Dashboard
             </h2>
         </template>
-        <div class="py-12">
+        <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <form @submit.prevent="submit">

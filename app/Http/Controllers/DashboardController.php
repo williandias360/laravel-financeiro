@@ -31,11 +31,12 @@ class DashboardController extends Controller
             ];
         }
 
-
         $totalizador = $this->movimento->getDashboard(
             new DateTimeImmutable($filtroDatas[0]),
             new DateTimeImmutable($filtroDatas[1])
         );
+
+        $filters = $filtroDatas;
 
         return Inertia::render('Dashboard', [
             "Totalizador" => $totalizador,

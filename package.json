@@ -23,6 +23,7 @@
         "chart.js": "^3.9.1",
         "dayjs": "^1.11.6",
         "litepie-datepicker": "^1.0.14",
-        "vue-chartjs": "^4.1.2"
+        "vue-chartjs": "^4.1.2",
+        "vue3-easy-data-table": "^1.5.14"
     }
 }

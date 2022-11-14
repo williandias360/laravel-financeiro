@@ -15,10 +15,6 @@ const props = defineProps({
   separator: {
     default: ' - ',
   },
-  startFrom: {
-    //type: Date,
-    default: new Date(),
-  },
   formatter: {
     type: Object,
     default: () => {
@@ -43,7 +39,7 @@ watch(() => props.modelValue, (data) => emit('update:modelValue', data))
 <template>
   <div class="flex">
     <litepie-datepicker v-model="modelValue" :placeholder="placeHolder" :separator="separator" :formatter="formatter"
-      :auto-apply="autoApply" :shortcuts="shortcuts" i18n="pt-br" :start-from="startFrom" readonly>
+      :auto-apply="autoApply" :shortcuts="shortcuts" i18n="pt-br" readonly>
     </litepie-datepicker>
   </div>
 </template>

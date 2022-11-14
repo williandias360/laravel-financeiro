@@ -7,6 +7,8 @@ import { InertiaProgress } from '@inertiajs/progress';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import LitepieDatepicker from 'litepie-datepicker';
+import Vue3EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -18,6 +20,7 @@ createInertiaApp({
             .use(plugin)
             .use(LitepieDatepicker)
             .use(ZiggyVue, Ziggy)
+            .component('EasyDataTable', Vue3EasyDataTable)
             .mount(el);
     },
 });
