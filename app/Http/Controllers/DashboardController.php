@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DashboardRequest;
 use App\Models\Movimento;
+use Carbon\Carbon;
+use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -13,18 +15,31 @@ class DashboardController extends Controller
     public function index(DashboardRequest $request)
     {
         $filters = $request->validated();
+        //dd($filters);
 
-        $ano = $filters["ano"] ?? now()->format("Y");
-        $mes = $filters["mes"] ?? now()->format("m");
+        $data_inicio = [];
+        if (isset($filters["data_inicio"])) {
+            $data_inicio = [
+                Carbon::createFromFormat('d/m/Y', $filters["data_inicio"][0])->format('Y-m-d'),
+                Carbon::createFromFormat('d/m/Y', $filters["data_inicio"][1])->format('Y-m-d')
+            ];
+        } else {
+            $data_inicio =  [
+                now()->format('Y-m-d'),
+                now()->format('Y-m-d')
+            ];
+        }
 
         $debitos = DB::table('Movimento')
             ->selectRaw('YEAR(DataMovimento) AS Ano, MONTH(DataMovimento) AS Mes, SUM(Valor * -1) AS ValorDebito, 0 AS ValorCredito')
+            ->whereBetween('DataMovimento', $data_inicio)
             ->where('Valor', '<', 0)
             ->groupBy(['Ano', 'Mes']);
 
         $creditos = DB::table('Movimento')
             ->selectRaw('YEAR(DataMovimento) AS Ano, MONTH(DataMovimento) AS Mes, 0 AS ValorDebito, SUM(Valor) AS ValorCredito')
             ->unionAll($debitos)
+            ->whereBetween('DataMovimento', $data_inicio)
             ->where('Valor', '>', 0)
             ->groupBy(['Ano', 'Mes']);
 
@@ -52,13 +67,11 @@ class DashboardController extends Controller
             ->get();
 
         $creditos = Movimento::where('Valor', '>', 0)
-            ->whereYear('DataMovimento', $ano)
-            ->whereMonth('DataMovimento', $mes)
+            ->whereBetween('DataMovimento', $data_inicio)
             ->sum('Valor');
 
         $debitos = Movimento::where('Valor', '<', 0)
-            ->whereYear('DataMovimento', $ano)
-            ->whereMonth('DataMovimento', $mes)
+            ->whereBetween('DataMovimento', $data_inicio)
             ->sum('Valor');
 
         $saldo = $creditos + $debitos;

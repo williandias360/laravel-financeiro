@@ -24,8 +24,8 @@ class DashboardRequest extends FormRequest
     public function rules()
     {
         return [
-            "ano" => "nullable|integer",
-            "mes" => "nullable|integer"
+            'data_inicio' => 'nullable',
+            'data_final' => 'nullable'
         ];
     }
 }
